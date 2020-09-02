@@ -3,8 +3,8 @@ package main
 import (
 	"github.com/BurntSushi/toml"
 	"flag"
-	"log"
-	"github.com/aflek/http-rest-api/internal/app/apiserver"
+  "log"
+  "github.com/aflek/http-rest-api/internal/app/apiserver"
 )
 
 //Путь до конфига будем передавать флагом в командной строке
@@ -13,7 +13,7 @@ var (
 )
 
 func init() {
-  flag.StringVar(&configPath, "config-path", "config/apiserver.toml", "path to config file")
+  flag.StringVar(&configPath, "config-path", "configs/apiserver.toml", "path to config file")
 }
 
 func main() {
@@ -23,10 +23,11 @@ func main() {
   if err != nil {
     log.Fatal(err)
   }
+
   //Создаем API-сервер
   s := apiserver.New(config)
   //Запускаем сервер
-  if err:= s.Start; err != nil {
+  if err:= s.Start(); err != nil {
     log.Fatal(err)
   }
 }

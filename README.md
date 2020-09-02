@@ -23,3 +23,5 @@ go get github.com/BurntSushi/toml
 ```bash
 ./apiserver -config-path configs/apiserver.toml
 ```
+4. Логирование apiserver реализовано с использованием пакета Logrus: https://github.com/sirupsen/logrus
+
