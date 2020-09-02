@@ -1,11 +1,15 @@
 package apiserver
 
 // APIServer struct
-type APIServer struct {}
+type APIServer struct {
+  config *Config
+}
 
 // New - функция инициализации API сервера
-func New() *APIServer {
-  return &APIServer{}
+func New(config *Config) *APIServer {
+  return &APIServer{
+    config: config,
+  }
 }
 
 // Start - функция запуска API - сервера
