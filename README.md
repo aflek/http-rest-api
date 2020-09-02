@@ -20,4 +20,6 @@ make
 go get github.com/BurntSushi/toml
 ```
 Запуск сервера с настройками из данного конфигурационным файла осуществляется командой:
+```bash
 ./apiserver -config-path configs/apiserver.toml
+```
