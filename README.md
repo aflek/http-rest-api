@@ -27,9 +27,14 @@ go get github.com/BurntSushi/toml
 Уровень логирования можно изменить в файле nfigs/apiserver.toml, в переменной: log_level.
 По-умолчанию (если в файле apiserver.toml не указан уровень) log_level = "debug".
 Возможно указание следующих уровней:
-- debug
-- info
-- warning
-- panic
-- fatal 
+  - debug
+  - info
+  - warning
+  - panic
+  - fatal 
 
+5. Роутер реализован на базе пакета https://github.com/gorilla/mux
+Установка:
+```bash
+go get -u github.com/gorilla/mux 
+```
