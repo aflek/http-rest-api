@@ -24,4 +24,12 @@ go get github.com/BurntSushi/toml
 ./apiserver -config-path configs/apiserver.toml
 ```
 4. Логирование apiserver реализовано с использованием пакета Logrus: https://github.com/sirupsen/logrus
+Уровень логирования можно изменить в файле nfigs/apiserver.toml, в переменной: log_level.
+По-умолчанию (если в файле apiserver.toml не указан уровень) log_level = "debug".
+Возможно указание следующих уровней:
+- debug
+- info
+- warning
+- panic
+- fatal 
 
