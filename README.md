@@ -38,3 +38,9 @@ go get github.com/BurntSushi/toml
 ```bash
 go get -u github.com/gorilla/mux 
 ```
+
+6. Для тестов используется пакет https://github.com/stretchr/testify
+  Установка:
+  ```bash
+  go get github.com/stretchr/testify
+  ```
