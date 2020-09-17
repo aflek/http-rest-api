@@ -5,6 +5,7 @@ import (
 	"net/http"
   "github.com/sirupsen/logrus"
   "github.com/gorilla/mux"
+  "github.com/aflek/http-rest-api/internal/app/store"
 )
 
 
@@ -13,6 +14,7 @@ type APIServer struct {
   config *Config
   logger *logrus.Logger
   router *mux.Router
+  store  *store.Store
 }
 
 // New - функция инициализации API сервера
@@ -32,6 +34,11 @@ func (s *APIServer) Start() error {
   }
 
   s.configureRouter()//подключем роутер
+
+  //подключение к БД
+  if err := s.configureStore(); err != nil {
+    return err
+  }
 
   s.logger.Info("starting api server")//логируем стар сервиса
 
@@ -54,6 +61,18 @@ func (s *APIServer) configureLogger() error {
 //configureRouter - роутер
 func (s *APIServer) configureRouter() {
   s.router.HandleFunc("/hello", s.handleHello())
+}
+
+//configureStore - хранилище
+func (s *APIServer) configureStore() error {
+  st := store.New(s.config.Store)
+  if err := st.Open(); err != nil {
+    return err
+  }
+
+  s.store = st
+
+  return nil
 }
 
 func (s *APIServer) handleHello() http.HandlerFunc {

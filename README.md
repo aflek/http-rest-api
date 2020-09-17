@@ -44,3 +44,20 @@ go get -u github.com/gorilla/mux
   ```bash
   go get github.com/stretchr/testify
   ```
+
+7. Для работы с БД используется пакет database-sql. Учебник здесь: http://go-database-sql.org
+   В качестве альтернативы можно рассмотреть пакет https://github.com/jmoiron/sqlx
+
+8. Posgres драйвер здесь: https://github.com/lib/pq
+   Устанавливается командой:
+   ```bash
+   go get github.com/lib/pq 
+   ```
+9. Создаем базу данных командой:
+  ```bash
+    createdb restapi_dev
+  ```
+  Запускаем сервер:
+  ```bash
+    make; ./apiserver
+  ```
