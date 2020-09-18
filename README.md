@@ -88,3 +88,18 @@
     ```bash
     migrate -path migrations -database "postgres://postgres:123456@localhost:5432/restapi_dev?sslmode=disable" up
     ```
+    Проверяем резузльтат.
+    Подключаемся к базе:
+    ```bash
+    psql -d restapi_dev
+    ```
+    Выводим списко таблиц:
+    ```bash
+    \dt
+    ```
+    Смотрим таблицу users:
+    ```bash  
+    \d users;
+    ```
+    Выходим из базы данных:
+    \q
