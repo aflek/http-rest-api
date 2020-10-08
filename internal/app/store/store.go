@@ -7,8 +7,9 @@ import (
 
 //Store ...
 type Store struct {
-  config *Config
-  db     *sql.DB
+  config         *Config
+  db             *sql.DB
+  userRepository *UserRepository
 }
 
 //New - вспомогательный метод
@@ -37,7 +38,22 @@ func (s *Store) Open() error {
   return nil
 }
 
-//Close метод отключения от БД
+//Close - метод отключения от БД
 func (s *Store) Close() {
   s.db.Close()
+}
+
+//User - метод обращения к таблице User для пользователей из "внешного мира" (не internal)
+// пример вызова метода Ctrate: store.User().Create
+func (s *Store) User() *UserRepository {
+  if s.userRepository != nil {
+    return s.userRepository
+  }
+  //Если он не существует то инициализируем
+  s.userRepository = &UserRepository{
+    store: s,
+  }
+
+  return s.userRepository
+
 }

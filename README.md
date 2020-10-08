@@ -79,7 +79,7 @@
     20200917182500_create_users.up.sql
     20200917182500_create_users.down.sql
 
-11. Запуск миграций:
+11. Запуск миграций для dev БД:
     Под текущим пользователем:
     ```bash
     migrate -path migrations -database "postgres://localhost:5432/restapi_dev?sslmode=disable" up
@@ -89,17 +89,11 @@
     migrate -path migrations -database "postgres://postgres:123456@localhost:5432/restapi_dev?sslmode=disable" up
     ```
     Проверяем резузльтат.
-    Подключаемся к базе:
-    ```bash
-    psql -d restapi_dev
-    ```
-    Выводим списко таблиц:
-    ```bash
-    \dt
-    ```
-    Смотрим таблицу users:
-    ```bash  
-    \d users;
-    ```
-    Выходим из базы данных:
-    \q
+    Подключаемся к базе: psql -d restapi_dev
+    Выводим списко таблиц: \dt
+    Смотрим таблицу users: \d users;
+    Выходим из базы данных: \q
+
+12. Запуск миграций для тестовой БД:
+    createdb restapi_test
+    migrate -path migrations -database "postgres://postgres:123456@localhost:5432/restapi_test?sslmode=disable" up
