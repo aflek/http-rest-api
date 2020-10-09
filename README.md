@@ -97,3 +97,16 @@
 12. Запуск миграций для тестовой БД:
     createdb restapi_test
     migrate -path migrations -database "postgres://postgres:123456@localhost:5432/restapi_test?sslmode=disable" up
+
+13. Для хэширования паролей полезователей используем пакет bcrypt:
+    go get golang.org/x/crypto
+
+14. Для валидации параметров запросов используем ozzo-validation:
+    github.com/go-ozzo/ozzo-validation
+
+    устанавиваем с помощью комманд:
+    ```bash
+    go get github.com/go-ozzo/ozzo-validation
+    ```
+
+
