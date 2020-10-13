@@ -1,4 +1,4 @@
-package store
+package sqlstore
 
 import (
 	"github.com/aflek/http-rest-api/internal/app/model"
@@ -10,27 +10,23 @@ type UserRepository struct {
 }
 
 // Create - метод добавления пользователя
-func (r *UserRepository) Create(u *model.User) (*model.User, error) {
+func (r *UserRepository) Create(u *model.User) error {
   //Перед добавлением записи валидируем данные
   if err := u.Validate(); err != nil {
-    return nil, err
+    return err
   }
 
   //Перед созданием записи выполняем обработку данных BeforeCreate: хэшируем пароль и т.п.
   if err := u.BeforeCreate(); err != nil {
-    return nil, err
+    return err
   }
 
   //Добавляем данные
-  if err := r.store.db.QueryRow(
+  return r.store.db.QueryRow(
     "INSERT INTO users (email, encrypted_password) VALUES ($1, $2) RETURNING id",
     u.Email,
     u.EncryptedPassword,
-  ).Scan(&u.ID); err != nil {
-    return nil, err
-  }
-  //если нет ошибки, то возвращаем юзера
-  return u, nil
+  ).Scan(&u.ID)
 }
 
 
