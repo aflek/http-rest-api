@@ -1,6 +1,9 @@
 package sqlstore
 
 import (
+  "database/sql"
+
+	"github.com/aflek/http-rest-api/internal/app/store"
 	"github.com/aflek/http-rest-api/internal/app/model"
 )
 
@@ -29,6 +32,26 @@ func (r *UserRepository) Create(u *model.User) error {
   ).Scan(&u.ID)
 }
 
+// Find ...
+func (r *UserRepository) Find(id int) (*model.User, error) {
+	u := &model.User{}
+	if err := r.store.db.QueryRow(
+		"SELECT id, email, encrypted_password FROM users WHERE id = $1",
+		id,
+	).Scan(
+		&u.ID,
+		&u.Email,
+		&u.EncryptedPassword,
+	); err != nil {
+		if err == sql.ErrNoRows {
+			return nil, store.ErrRecordNotFound
+		}
+
+		return nil, err
+	}
+
+	return u, nil
+}
 
 // FindByEmail - метод поиска User по e-mail
 func (r *UserRepository) FindByEmail(email string) (*model.User, error) {
@@ -41,6 +64,11 @@ func (r *UserRepository) FindByEmail(email string) (*model.User, error) {
     &u.Email,
     &u.EncryptedPassword,
   ); err != nil {
+    if err == sql.ErrNoRows {
+      return nil, store.ErrRecordNotFound
+    }
+
+
     return nil, err
   }
   return u, nil

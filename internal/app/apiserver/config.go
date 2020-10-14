@@ -1,8 +1,5 @@
 package apiserver
 
-import (
-  "github.com/aflek/http-rest-api/internal/app/store"
-)
 
 // Config ...
 type Config struct {
@@ -11,7 +8,8 @@ type Config struct {
   //Уровень логирования
   LogLevel string `toml:"log_lavel"`
   //Подключение к БД
-  Store *store.Config
+  DatabaseURL string `toml:"database_url"`
+  SessionKey  string `toml:"session_key"`
 }
 
 //NewConfig - функция инициализации с дефолтными параметрами конфига
@@ -19,6 +17,5 @@ func NewConfig() *Config {
   return &Config {
     BindAddr: ":8080",
     LogLevel: "debug",
-    Store:    store.NewConfig(),
   }
 }

@@ -1,6 +1,7 @@
 package sqlstore_test
 
 import (
+	"github.com/aflek/http-rest-api/internal/app/store"
 	"github.com/stretchr/testify/assert"
   "testing"
   "github.com/aflek/http-rest-api/internal/app/store/sqlstore"
@@ -15,9 +16,11 @@ func TestUserRepository_Create(t *testing.T) {
   defer teardown("users")
 
   s := sqlstore.New(db)
-  u := model.TestUser(t)
-  assert.NoError(t, s.User().Create(u))
-  assert.NotNil(t, u)
+	u1 := model.TestUser(t)
+	s.User().Create(u1)
+	u2, err := s.User().Find(u1.ID)
+	assert.NoError(t, err)
+	assert.NotNil(t, u2)
 }
 
 func TestUserRepository_FindByEmail(t *testing.T) {
@@ -27,18 +30,13 @@ func TestUserRepository_FindByEmail(t *testing.T) {
   defer teardown("users")
 
   s := sqlstore.New(db)
-  //Тест на поиск несуществющего пользователя
-  email := "user@example.org"
-  _, err := s.User().FindByEmail(email)
-  assert.Error(t, err)
+	u1 := model.TestUser(t)
+	_, err := s.User().FindByEmail(u1.Email)
+	assert.EqualError(t, err, store.ErrRecordNotFound.Error())
 
-  //Создаем пользователя и тестируем его поиск
-  u := model.TestUser(t)
-  u.Email = email
-  s.User().Create(u)
-
-  u, err = s.User().FindByEmail(email)
-  assert.NoError(t, err)
-  assert.NotNil(t, u)
+	s.User().Create(u1)
+	u2, err := s.User().FindByEmail(u1.Email)
+	assert.NoError(t, err)
+	assert.NotNil(t, u2)
 
 }

@@ -1,9 +1,11 @@
 package sqlstore
 
 import (
-	"database/sql"
+  "database/sql"
+  "fmt"
 	"testing"
   "strings"
+  _ "github.com/lib/pq" // ...
 )
 
 // TestDB ...
@@ -21,7 +23,7 @@ func TestDB(t *testing.T, databaseURL string) (*sql.DB, func(... string)) {
 
   return db, func(tables ... string) {
     if len(tables) >0 {
-      db.Exec("TRUNCATE %s CASCADE", strings.Join(tables, ", "))
+      db.Exec(fmt.Sprintf("TRUNCATE %s CASCADE", strings.Join(tables, ", ")))
     }
 
     db.Close()

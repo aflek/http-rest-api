@@ -8,10 +8,10 @@ import (
 
 //User ...
 type User struct {
-  ID                int
-  Email             string
-  Password          string
-  EncryptedPassword string
+  ID                int    `json:"id"`
+  Email             string `json:"email"`
+  Password          string `json:"password,onitempty"`
+  EncryptedPassword string `json:"-"`
 }
 
 // Validate - валидация User
@@ -40,6 +40,10 @@ func (u *User) BeforeCreate() error {
   return nil
 }
 
+// Sanitaze - убираем данные о пароле, которые не нужно показывать
+func (u *User) Sanitaze() {
+  u.Password = ""
+}
 
 // encryptString - ширование строки
 func encryptString(s string) (string, error) {

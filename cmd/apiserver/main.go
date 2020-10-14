@@ -1,9 +1,9 @@
 package main
 
 import (
-	"github.com/BurntSushi/toml"
 	"flag"
   "log"
+  "github.com/BurntSushi/toml"
   "github.com/aflek/http-rest-api/internal/app/apiserver"
 )
 
@@ -18,16 +18,16 @@ func init() {
 
 func main() {
   flag.Parse()
+  
   config := apiserver.NewConfig()
   _, err := toml.DecodeFile(configPath, config)
   if err != nil {
     log.Fatal(err)
   }
 
-  //Создаем API-сервер
-  s := apiserver.New(config)
+
   //Запускаем сервер
-  if err:= s.Start(); err != nil {
+  if err:= apiserver.Start(config); err != nil {
     log.Fatal(err)
   }
 }

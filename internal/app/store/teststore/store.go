@@ -1,8 +1,9 @@
+
 package teststore
 
 import (
 	"github.com/aflek/http-rest-api/internal/app/model"
-	"github.com/aflek/http-rest-api/internal/app/store"
+  "github.com/aflek/http-rest-api/internal/app/store"
 )
 
 // Store ...
@@ -28,3 +29,5 @@ func (s *Store) User() store.UserRepository {
 
 	return s.userRepository
 }
+
+

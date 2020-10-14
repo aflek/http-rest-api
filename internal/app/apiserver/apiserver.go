@@ -1,84 +1,42 @@
 package apiserver
 
 import (
-	"io"
-	"net/http"
-  "github.com/sirupsen/logrus"
-  "github.com/gorilla/mux"
-  "github.com/aflek/http-rest-api/internal/app/store"
+  "database/sql"
+  "net/http"
+
+  "github.com/aflek/http-rest-api/internal/app/store/sqlstore"
+  "github.com/gorilla/sessions"
+  _ "github.com/lib/pq"
 )
 
-
-// APIServer struct
-type APIServer struct {
-  config *Config
-  logger *logrus.Logger
-  router *mux.Router
-  store  *store.Store
-}
-
-// New - функция инициализации API сервера
-func New(config *Config) *APIServer {
-  return &APIServer {
-    config: config,
-    logger: logrus.New(),
-    router: mux.NewRouter(),
-  }
-}
-
-// Start - функция запуска API - сервера
-func (s *APIServer) Start() error {
-
-  if err := s.configureLogger(); err != nil {
-    return err
-  }
-
-  s.configureRouter()//подключем роутер
-
-  //подключение к БД
-  if err := s.configureStore(); err != nil {
-    return err
-  }
-
-  s.logger.Info("starting api server")//логируем стар сервиса
-
-  return http.ListenAndServe(s.config.BindAddr, s.router)
-}
-
-//configureLogger - конфигурирование логирования
-func (s *APIServer) configureLogger() error {
-  level, err := logrus.ParseLevel(s.config.LogLevel)//парсим конфиг
+// Start ...
+func Start(config *Config) error {
+  db, err := newDB(config.DatabaseURL)
   if err != nil {
     return err
   }
 
-  s.logger.SetLevel(level) //задаем уровень логирования
+  defer db.Close()
 
-  return nil
+  store := sqlstore.New(db)
+  sessionStore := sessions.NewCookieStore([]byte(config.SessionKey))
+  srv := newServer(store, sessionStore)
 
+  return http.ListenAndServe(config.BindAddr, srv)
 }
 
-//configureRouter - роутер
-func (s *APIServer) configureRouter() {
-  s.router.HandleFunc("/hello", s.handleHello())
-}
-
-//configureStore - хранилище
-func (s *APIServer) configureStore() error {
-  st := store.New(s.config.Store)
-  if err := st.Open(); err != nil {
-    return err
+// newDB ...
+func newDB(databaseURL string) (*sql.DB, error) {
+  db, err := sql.Open("postgres", dbURL)
+  if err != nil {
+    return nil, err
   }
 
-  s.store = st
+  defer db.Close()
 
-  return nil
-}
-
-func (s *APIServer) handleHello() http.HandlerFunc {
-
-  return func(w http.ResponseWriter, r *http.Request) {
-    io.WriteString(w, "Hello")
+  if err := db.Ping(); err != nil {
+    return nil, err
   }
 
+  return db, nil
 }

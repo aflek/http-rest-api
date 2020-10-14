@@ -3,7 +3,6 @@ package sqlstore
 import (
   "database/sql"
   "github.com/aflek/http-rest-api/internal/app/store"
-  _ "github.com/lib/pq" //подключаем анонимно, что бы методы пакета Open, Close не импортировались в наш код,  т.к. у нас свои методы подключения и они не должны быть затерты методами из пакета
 )
 
 //Store ...
